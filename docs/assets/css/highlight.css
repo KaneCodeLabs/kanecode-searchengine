@@ -1,0 +1,273 @@
+/*******************************
+         Code Samples
+*******************************/
+
+
+code.code {
+  display: block;
+  overflow-x: auto;
+  padding: 0em;
+  color: #666;
+  background-color: #f3f2f0;
+  border-radius: .25rem;
+  -webkit-text-size-adjust: none;
+}
+
+/*--------------
+   Hover Only
+---------------*/
+
+code.code,
+code.code span {
+  -moz-transition: 0.5s color ease;
+  -webkit-transition: 0.5s color ease;
+  -ms-transition: 0.5s color ease;
+  transition: 0.5s color ease;
+}
+code.code {
+  color: #333333;
+}
+
+code.code.xml {
+  color: #555555;
+}
+code.code.xml:hover {
+  color: #333333;
+}
+
+/* Class Name */
+code .string,
+code .tag .value,
+code .phpdoc,
+code .dartdoc,
+code .tex .formula {
+  color: #008C79;
+}
+code:hover .string,
+code:hover .tag .value,
+code:hover .phpdoc,
+code:hover .dartdoc,
+code:hover .tex .formula {
+  color: #007b6b;
+}
+
+/* Comment */
+code .comment,
+code .template_comment,
+code .diff .header,
+code .javadoc {
+  color: #AAAAAA;
+  font-style: italic;
+}
+
+
+/* Properties */
+code .tag,
+code .rules .property,
+code .django .tag .keyword {
+  color: #858188;
+  font-weight: normal;
+}
+
+code:hover .tag,
+code:hover .rules .property,
+code:hover .django .tag .keyword {
+  color: #892A6F;
+  font-weight: normal;
+}
+
+/* HTML Tag */
+code .tag .title {
+  color: #858188;
+  font-weight: normal;
+}
+code:hover .tag .title {
+  color: #892A6F;
+}
+
+/* Attribute */
+code .attribute,
+code .variable,
+code .lisp .body {
+  color: #8D8A8A;
+  transition: color 0.3s;
+}
+code:hover .attribute,
+code:hover .variable,
+code:hover .lisp .body {
+  color: #934E4E;
+}
+
+/* CSS ID */
+code .title,
+code .id,
+code .scss .preprocessor {
+  color: #9C989F;
+  font-weight: bold;
+}
+
+/* CSS Attribute */
+code .rule .attribute {
+  color: #892A6F;
+}
+code:hover .rule .attribute {
+  color: #892A6F;
+}
+
+/* CSS Value */
+code .number,
+code .hexcolor,
+code .ruby .constant {
+  color: #666666;
+}
+
+code:hover .number,
+code:hover .hexcolor,
+code:hover .ruby .constant {
+  color: #333333;
+}
+
+/* LESS */
+code.less .number,
+code.less .hexcolor,
+code.less .ruby .constant {
+  color: #005FAA;
+}
+code.less:hover .number,
+code.less:hover .hexcolor,
+code.less:hover .ruby .constant {
+  color: #005FAA;
+}
+/* LESS Variable */
+code.less .attribute,
+code.less .variable,
+code.less .lisp .body {
+  color: #333333;
+  transition: color 0.3s;
+}
+code.less:hover .attribute,
+code.less:hover .variable,
+code.less:hover .lisp .body {
+  color: #333333;
+}
+
+/* Emphasized Value */
+code.code .class {
+  color: #008C79;
+}
+code.code .class b {
+  font-weight: normal;
+  background-color: rgba(90, 90, 90, 0);
+  border-radius: 5px;
+  line-height: 1;
+  vertical-align: baseline;
+  display: inline-block;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  margin: 0px -4px;
+  padding: 1px 4px;
+}
+code.code .class b {
+  background-color: rgba(218, 189, 40, 0.15);
+  color: #9E6C00;
+}
+
+/*
+code.code:hover .class.string b,
+code.code:hover .class.value b {
+  background-color: rgba(218, 189, 40, 0.1);
+  color: inherit;
+}
+*/
+
+
+/* Linked UI */
+code .tag .value a {
+  position: relative;
+  border-radius: 5px;
+  line-height: 1;
+  color: inherit;
+  margin: 0px -2px;
+  padding: 1px 4px;
+  background-color: rgba(150, 150, 150, 0.1);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+code .tag .value a b {
+  border-radius: 0px;
+}
+code .tag .value a:hover {
+  background-color: rgba(40, 150, 218, 0.2);
+  color: #00689E;
+}
+code .tag .value a:hover b {
+  background-color: transparent;
+  color: inherit;
+}
+
+
+
+/*--------------
+      Normal
+---------------*/
+
+code .keyword,
+code .css .rule .keyword,
+code .winutils,
+code .javascript .title,
+code .nginx .title,
+code .subst,
+code .request,
+code .status {
+  color: #333;
+  font-weight: bold;
+}
+
+code .javascript .title,
+code .list .keyword,
+code .subst {
+  font-weight: normal;
+}
+
+code .class .title,
+code .type,
+code .vhdl .literal,
+code .tex .command {
+  color: #458;
+  font-weight: bold;
+}
+
+
+code .regexp {
+  color: #009926;
+}
+
+code .built_in {
+  color: #0086b3;
+}
+
+code .preprocessor,
+code .pragma,
+code .pi,
+code .doctype,
+code .shebang,
+code .cdata {
+  color: #999;
+  font-weight: bold;
+}
+
+code .deletion {
+  background: #fdd;
+}
+
+code .addition {
+  background: #dfd;
+}
+
+code .diff .change {
+  background: #0086b3;
+}
+
+code .chunk {
+  color: #aaa;
+}
