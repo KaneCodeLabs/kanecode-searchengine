@@ -1,5 +1,13 @@
+html {
+	height: inherit;
+}
+
 body {
-	margin-left: 15rem;
+	margin: 1rem;
+	margin-left: 16rem;
+	pointer-events: none;
+	overflow: hidden;
+	opacity: inherit;
 }
 
 main {
@@ -8,4 +16,54 @@ main {
 
 pre {
 	tab-size: 4;
+}
+
+
+////////////////////////////////////////
+
+.page-loader {
+	position: fixed !important;
+	background-color: #fff !important;
+	opacity: 1 !important;
+	transition: opacity .25s .25s !important;
+}
+
+body.page-loaded {
+	pointer-events: auto;
+	overflow: auto;
+}
+
+body.page-loaded .page-loader {
+	opacity: 0 !important;
+	pointer-events: none;
+}
+
+.example-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: .5rem;
+	.labeled.example.button {
+		> .ui {
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
+			padding: 0.4rem 0.6rem !important;
+	
+			i {
+				margin: 0 !important;
+				margin-right: 2px !important;
+			}
+		}
+	}
+	.example-code {
+		display: none;
+		pre {
+			margin: 0 !important;
+		}
+	}
+	&.show-code {
+		.example-code {
+			display: block;
+		}
+	}
 }

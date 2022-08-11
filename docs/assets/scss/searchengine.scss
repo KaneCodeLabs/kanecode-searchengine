@@ -1,0 +1,48 @@
+.kcsearchengine:not(.kcsearchengine__theme-clear) {
+	display: flex;
+	flex-direction: column;
+
+	.kcsearchengine__wrapper {
+		display: flex;
+		flex-direction: column;
+		
+		.kcsearchengine__input-group {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			height: 2em;
+
+			.kcsearchengine__input {
+				display: flex;
+				flex: 1 0 auto;
+				height: 100%;
+				border: none;
+				background: transparent;
+				padding: 0 0.5em;
+			}
+
+			.kcsearchengine__button {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex: 0 0 2em;
+				height: 100%;
+				border: none;
+				background: transparent;
+			}
+		}
+	}
+}
+
+// Light theme
+/* .kcsearchengine.kcsearchengine__theme-light {
+	.kcsearchengine__input-group {
+		background-color: #fff;
+		border: 1px solid #ccc;
+		border-radius: .2rem;
+	}
+
+	.kcsearchengine__button {
+		background-color: #ccc;
+	}
+} */

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Installation</title>
+</head>
+<body>
+	<h1>How to install</h1>
+	<div class="ui styled fluid accordion">
+		<div class="title active">
+			<i class="dropdown icon"></i>
+			jsDelivr
+		</div>
+		<div class="content active">
+			<div class="transition visible">
+				<p>Paste the following code into the <code>&lt;head&gt;</code> section:</p>
+				<pre><code class="code xml">&lt;link href="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/dist/searchengine.min.css" rel="stylesheet"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/dist/searchengine.min.js"&gt;&lt;/script&gt;</code></pre>
+			</div>
+		</div>
+		<div class="title">
+			<i class="dropdown icon"></i>
+			GitHub
+		</div>
+		<div class="content">
+			<div class="transition hidden">
+				<h3>Step 1</h3>
+				<p>Download the latest version of the <a href="https://github.com/KaneCodeLabs/kanecode-searchengine">Kanecode Search Engine</a> from GitHub.</p>
+
+				<h3>Step 2</h3>
+				<p>Copy the contents of the <code>kanecode-searchengine</code> folder into your project.</p>
+
+				<h3>Step 3</h3>
+				<p>Paste the following code into the <code>&lt;head&gt;</code> section:</p>
+				<pre><code class="code xml">&lt;link href="&lt;your-project-path&gt;/kanecode-searchengine/dist/searchengine.min.css" rel="stylesheet"&gt;
+&lt;script src="&lt;your-project-path&gt;/kanecode-searchengine/dist/searchengine.min.js"&gt;&lt;/script&gt;</code></pre>
+			</div>
+		</div>
+		<div class="title" style="opacity: .5; pointer-events: none;">
+			<i class="dropdown icon"></i>
+			npm (upcoming)
+		</div>
+		<div class="content">
+			<div class="transition hidden"></div>
+		</div>
+	</div>
+
+	<h1>How to use</h1>
+	<p>To use the search engine, you need to create an empty element and call a script to mount the search engine into it. The following code snippet will do this:</p>
+	<pre><code class="code xml">&lt;div class="search-selector"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+// The data to be searched
+var fruits = ['Apple', 'Orange', 'Pear', 'Banana', 'Strawberry'];
+
+// The element to mount the search engine into
+var selector = document.querySelector('.search-selector');
+
+// Initialization and configuration of the search engine
+var search = new KCSearchEngine(selector, {
+	data: fruits
+});
+&lt;/script&gt;</code></pre>
+
+	<script src="assets/js/pre.js"></script>
+</body>
+</html>

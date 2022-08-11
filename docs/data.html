@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Data</title>
+
+	<!-- Kanecode SearchEngine libraries -->
+	<link rel="stylesheet" href="assets/css/searchengine.css">
+	<script src="assets/js/searchengine.js"></script>
+</head>
+<body>
+	<script src="assets/js/pre.js"></script>
+
+	<h1>Source data</h1>
+	<p>
+		This is a search engine that can be used to search data from any source. This data is necessary
+		to be able to search for the information you want and show recommendations.
+		The format of the data is always an array and there are many ways to specify it.
+	</p>
+
+	<h2 id="strings-array">Array of strings</h2>
+	<p>
+		You can add an array of strings to the <code>data</code> property of the configuration. This is
+		the simplest way to add data, but it is not the most efficient, since it is not possible to add
+		more information to the recommendations (like <i>keywords</i>, <i>recommendation html</i>,
+		<i>URL</i>, <i>onckick function</i>...).
+	</p>
+
+	<div class="example-wrapper">
+		<div class="example-canvas">
+			<div class="search-bar-1"></div>
+			<script>
+				var element = document.querySelector('.search-bar-1');
+				new KCSearchEngine(element, {
+					data: ['Apple', 'Orange', 'Strawberry']
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: ['Apple', 'Orange', 'Strawberry']
+});</code></pre>
+		</div>
+	</div>
+
+	<h2 id="objects-array">Array of objects</h2>
+	<p>
+		You can use objects instead of strings to add more information to the recommendations. The
+		<code>data</code> property of the configuration must be an array of objects, each object must
+		have a <code>title</code> property with the string to be searched and the rest of the properties
+		are optionals. Also you can add a <code>keywords</code>, <code>url</code>, <code>onclick</code>
+		and <code>helper-html</code>.
+	</p>
+
+	<div class="example-wrapper">
+		<div class="example-canvas">
+			<div class="search-bar-2"></div>
+			<script>
+				var element = document.querySelector('.search-bar-2');
+				new KCSearchEngine(element, {
+					data: [
+						{
+							title: 'Apple',
+							keywords: ['fruit', 'food'],
+							onclick: function() {
+								alert('Apple clicked!');
+							}
+						},
+						{
+							title: 'Orange',
+							keywords: ['fruit', 'food'],
+							onclick: function() {
+								alert('Orange clicked!');
+							}
+						},
+						{
+							title: 'Strawberry',
+							keywords: ['fruit', 'food'],
+							onclick: function() {
+								alert('Strawberry clicked!');
+							},
+						}
+					]
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: [
+		{
+			title: 'Apple',
+			keywords: ['fruit', 'food'],
+			onclick: function() {
+				alert('Apple clicked!');
+			}
+		},
+		{
+			title: 'Orange',
+			keywords: ['fruit', 'food'],
+			onclick: function() {
+				alert('Orange clicked!');
+			}
+		},
+		{
+			title: 'Strawberry',
+			keywords: ['fruit', 'food'],
+			onclick: function() {
+				alert('Strawberry clicked!');
+			},
+		}
+	]
+});</code></pre>
+		</div>
+	</div>
+
+	<h2 id="url">URL to JSON</h2>
+	<p>
+		You can add a URL to a JSON file to the <code>data</code> property of the configuration. This
+		is an efficient way to add data, since the data is loaded asynchronously and the search engine
+		is ready to be used as soon as the data is loaded.
+	</p>
+
+	<div class="example-wrapper">
+		<div class="example-canvas">
+			<div class="search-bar-3"></div>
+			<script>
+				var element = document.querySelector('.search-bar-3');
+				new KCSearchEngine(element, {
+					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json'
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json'
+});</code></pre>
+		</div>
+	</div>
+
+	<h2 id="function">Function</h2>
+	<p>
+		You can add a function to the <code>data</code> property of the configuration. This function
+		must return an array of strings or an array of objects, with the same format as the previous
+		examples. When the data is provided by a function, each time the user types something in the
+		search bar, the function is executed again to get the new data.
+	</p>
+
+	<div class="example-wrapper">
+		<div class="example-canvas">
+			<div class="search-bar-4"></div>
+			<script>
+				var element = document.querySelector('.search-bar-4');
+				new KCSearchEngine(element, {
+					data: function() {
+						if (Math.random() > 0.5) {
+							return ['Apple', 'Orange', 'Strawberry'];
+						} else {
+							return ['Pear', 'Banana', 'Pineapple'];
+						}
+					}
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: function() {
+		// Random data at each search with a simple condition
+		if (Math.random() > 0.5) {
+			return ['Apple', 'Orange', 'Strawberry'];
+		} else {
+			return ['Pear', 'Banana', 'Pineapple'];
+		}
+	}
+});</code></pre>
+		</div>
+	</div>
+
+	<h2 id="async-function">Async function</h2>
+	<p>
+		You can add an async function to the <code>data</code> property of the configuration. This
+		function must return a promise that resolves to an array of strings or an array of objects, with
+		the same format as the previous examples. When the data is provided by an async function, each
+		time the user types something in the search bar, the function is executed again to get the new
+		data, like the function example, but the data can be delayed and the search engine will wait for
+		the data to be ready.
+	</p>
+
+	<div class="example-wrapper">
+		<div class="example-canvas">
+			<div class="search-bar-5"></div>
+			<script>
+				var element = document.querySelector('.search-bar-5');
+				new KCSearchEngine(element, {
+					data: async function() {
+						return new Promise((resolve, reject) => {
+							setTimeout(() => {
+								resolve(['Apple', 'Orange', 'Strawberry']);
+							}, 1000);
+						});
+					}
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: async function() {
+		return new Promise((resolve, reject) => {
+			// Simulate a delay of 1 second with setTimeout
+			setTimeout(() => {
+				resolve(['Apple', 'Orange', 'Strawberry']);
+			}, 1000);
+		});
+	}
+});</code></pre>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	// Use the fetch API to get the data from a JSON file instead of using a function
+	data: async fetch('https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json')
+		.then(response => response.json())
+		.catch(error => [])
+});</code></pre>
+		</div>
+	</div>
+</body>
+</html>
