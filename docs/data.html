@@ -56,7 +56,7 @@
 			<div class="search-bar-2"></div>
 			<script>
 				var element = document.querySelector('.search-bar-2');
-				new KCSearchEngine(element, {
+				var engine = new KCSearchEngine(element, {
 					data: [
 						{
 							title: 'Apple',
@@ -81,6 +81,8 @@
 						}
 					]
 				});
+
+				//console.log(engine.data);
 			</script>
 		</div>
 		<div class="example-code">
