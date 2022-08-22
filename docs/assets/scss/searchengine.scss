@@ -77,6 +77,7 @@
 			width: 100%;
 			height: auto;
 			padding: 0.2em 0;
+			z-index: 1;
 			
 			> .kcsearchengine__recommendation {
 				cursor: pointer;
@@ -102,6 +103,7 @@
 /* LIGHT THEME */
 
 // Variables
+$color: #000;
 $background-color: #fff;
 $border-width: 1px;
 $border-color: #ccc;
@@ -115,11 +117,88 @@ $recommendation-info-color: #666;
 
 // Classes
 .kcsearchengine.kcsearchengine__theme-light {
+	color: $color;
+
 	> .kcsearchengine__wrapper {
 		> .kcsearchengine__input-group {
 			background-color: $background-color;
 			border: $border-width solid $border-color;
 			border-radius: $border-radius;
+			
+			> .kcsearchengine__input {
+				color: $color;
+			}
+			
+			> .kcsearchengine__button {
+				> svg {
+					fill: $icon-color;
+				}
+			}
+		}
+		
+		> .kcsearchengine__recommendations {
+			top: calc(100% + 2px);
+			background-color: $background-color;
+			border: $border-width solid $border-color;
+			border-radius: $border-radius;
+			box-shadow: $shadow;
+
+			> .kcsearchengine__recommendation {
+				&:hover {
+					background-color: $recommendation-background-color-hover;
+				}
+			}
+
+			> .kcsearchengine__recommendation-info {
+				color: $recommendation-info-color;
+			}
+		}
+	}
+
+	&.kcsearchengine--focus {
+		> .kcsearchengine__wrapper {
+			> .kcsearchengine__input-group {
+				border-color: $border-color-focus;
+
+				> .kcsearchengine__button {
+					> svg {
+						fill: $icon-color-focus;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+/* DARK THEME */
+
+// Variables
+$color: #fff;
+$background-color: #222;
+$border-width: 1px;
+$border-color: #444;
+$border-color-focus: #888;
+$border-radius: 0.2em;
+$icon-color: #666;
+$icon-color-focus: #aaa;
+$shadow: 0 3px 10px rgba(#000, 0.2);
+$recommendation-background-color-hover: rgba(#fff, 0.05);
+$recommendation-info-color: #666;
+
+// Classes
+.kcsearchengine.kcsearchengine__theme-dark {
+	color: $color;
+
+	> .kcsearchengine__wrapper {
+		> .kcsearchengine__input-group {
+			background-color: $background-color;
+			border: $border-width solid $border-color;
+			border-radius: $border-radius;
+
+			> .kcsearchengine__input {
+				color: $color;
+			}
 			
 			> .kcsearchengine__button {
 				> svg {

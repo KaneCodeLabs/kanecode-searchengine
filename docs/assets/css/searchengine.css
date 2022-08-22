@@ -102,6 +102,7 @@
   width: 100%;
   height: auto;
   padding: 0.2em 0;
+  z-index: 1;
 }
 
 .kcsearchengine:not(.kcsearchengine__theme-clear) > .kcsearchengine__wrapper > .kcsearchengine__recommendations > .kcsearchengine__recommendation {
@@ -136,10 +137,18 @@
 }
 
 /* LIGHT THEME */
+.kcsearchengine.kcsearchengine__theme-light {
+  color: #000;
+}
+
 .kcsearchengine.kcsearchengine__theme-light > .kcsearchengine__wrapper > .kcsearchengine__input-group {
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 0.2em;
+}
+
+.kcsearchengine.kcsearchengine__theme-light > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__input {
+  color: #000;
 }
 
 .kcsearchengine.kcsearchengine__theme-light > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__button > svg {
@@ -169,5 +178,49 @@
 
 .kcsearchengine.kcsearchengine__theme-light.kcsearchengine--focus > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__button > svg {
   fill: #666;
+}
+
+/* DARK THEME */
+.kcsearchengine.kcsearchengine__theme-dark {
+  color: #fff;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__input-group {
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 0.2em;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__input {
+  color: #fff;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__button > svg {
+  fill: #666;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__recommendations {
+  top: calc(100% + 2px);
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 0.2em;
+  -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__recommendations > .kcsearchengine__recommendation:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.kcsearchengine.kcsearchengine__theme-dark > .kcsearchengine__wrapper > .kcsearchengine__recommendations > .kcsearchengine__recommendation-info {
+  color: #666;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark.kcsearchengine--focus > .kcsearchengine__wrapper > .kcsearchengine__input-group {
+  border-color: #888;
+}
+
+.kcsearchengine.kcsearchengine__theme-dark.kcsearchengine--focus > .kcsearchengine__wrapper > .kcsearchengine__input-group > .kcsearchengine__button > svg {
+  fill: #aaa;
 }
 /*# sourceMappingURL=searchengine.css.map */

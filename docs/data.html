@@ -31,7 +31,11 @@
 			<script>
 				var element = document.querySelector('.search-bar-1');
 				new KCSearchEngine(element, {
-					data: ['Apple', 'Orange', 'Strawberry']
+					data: ['Apple', 'Orange', 'Strawberry'],
+					onSearch: function(results, value) {
+						console.log(`${value}:`, results);
+					},
+					theme: 'light'
 				});
 			</script>
 		</div>
@@ -127,13 +131,13 @@
 			<script>
 				var element = document.querySelector('.search-bar-3');
 				new KCSearchEngine(element, {
-					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json'
+					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@main/docs/data.json'
 				});
 			</script>
 		</div>
 		<div class="example-code">
 			<pre><code class="code js">new KCSearchEngine(element, {
-	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json'
+	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@main/docs/data.json'
 });</code></pre>
 		</div>
 	</div>

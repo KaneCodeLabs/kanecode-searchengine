@@ -76,6 +76,7 @@ var KCSearchEngine = class {
 	clear() {
 		this.input.value = '';
 		this.trigger();
+		this.hideRecommendations();
 	}
 
 	render() {
@@ -252,6 +253,13 @@ var KCSearchEngine = class {
 	
 			// Show the recommendations
 			this.showRecommendations();
+
+			// Run onSearch callback
+			if (typeof this.options.onSearch === 'function') {
+				try {
+					this.options.onSearch(this.results, this.value);
+				} catch { console.log(error); }
+			}
 		});
 	}
 
@@ -302,12 +310,16 @@ var KCSearchEngine = class {
 		else if (typeof data === 'string') {
 			processedData = async function() {
 				return new Promise((resolve, reject) => {
-					fetcher(data, (error, response) => {
-						if (error)
-							reject(error);
-						else
-							resolve(response);
-					});
+					const xhr = new XMLHttpRequest();
+					xhr.open('GET', data);
+					xhr.onload = () => {
+						if (xhr.status === 200) {
+							const data = JSON.parse(xhr.responseText);
+							resolve(data);
+						} else {
+							reject(xhr.status);
+						}
+					}
 					xhr.send();
 				})
 			}
@@ -358,6 +370,20 @@ var KCSearchEngine = class {
 			// Check if the input is empty
 			if (this.options.recommendations.hideOnEmpty && this.input.value === '')
 				this.hideRecommendations();
+			
+			if (typeof this.options.onInput === 'function') {
+				try {
+					this.options.onInput(this.results, this.value);
+				} catch { console.log(error); }
+			}
+		});
+		
+		this.input.addEventListener('change', () => {
+			if (typeof this.options.onChange === 'function') {
+				try {
+					this.options.onChange(this.results, this.value);
+				} catch { console.log(error); }
+			}
 		});
 
 		this.input.addEventListener('keydown', (e) => {
@@ -385,12 +411,32 @@ var KCSearchEngine = class {
 			}
 			if (this.options.recommendations.showOnFocus)
 				this.showRecommendations();
+			
+			if (typeof this.options.onFocus === 'function') {
+				try {
+					this.options.onFocus(this.results, this.value);
+				} catch { console.log(error); }
+			}
 		});
 
 		this.input.addEventListener('blur', () => {
 			this.element.classList.remove('kcsearchengine--focus');
 			if (this.options.recommendations.hideOnBlur)
 				this.hideRecommendations();
+
+			if (typeof this.options.onBlur === 'function') {
+				try {
+					this.options.onBlur(this.results, this.value);
+				} catch { console.log(error); }
+			}
+		});
+
+		this.element.querySelector('.kcsearchengine__button').addEventListener('click', () => {
+			if (typeof this.options.onBlur === 'function') {
+				try {
+					this.options.onBlur(this.results, this.value);
+				} catch { console.log(error); }
+			}
 		});
 
 		this.element.querySelector('.kcsearchengine__recommendations').addEventListener('mousedown', (e) => {
@@ -696,8 +742,10 @@ var KCSearchEngine = class {
 			const item = this.results[i];
 			const element = format(item, value);
 			element.addEventListener('click', () => {
-				if (this.options.recommendations.titleToInput)
+				if (this.options.recommendations.titleToInput) {
 					this.input.value = item.title;
+					this.trigger();
+				}
 				if (typeof item.onclick === 'function')
 					item.onclick();
 				if (typeof item.url === 'string')
@@ -708,7 +756,7 @@ var KCSearchEngine = class {
 				}
 			});
 			container.appendChild(element);
-			if (i >= this.options.recommendations.max) break;
+			if (i >= this.options.recommendations.max - 1) break;
 		}
 
 		if (container.innerHTML.trim() === '') {
