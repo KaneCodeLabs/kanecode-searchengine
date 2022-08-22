@@ -1,4 +1,4 @@
-var KCSearchEngine = class KCSearchEngine {
+var KCSearchEngine = class {
 	/**
 	 * @description The search engine is a simple search engine that allows you to search and show search recommendations.
 	 * @param {string | Element} element The element where the search engine will be placed.
@@ -45,17 +45,23 @@ var KCSearchEngine = class KCSearchEngine {
 			placeholder: 'Search...',
 			recommendations: {
 				enabled: true,
-				format: (title, value) => {
+				format: (item, value) => {
 					const element = document.createElement('div');
 					element.classList.add('kcsearchengine__recommendation');
 					element.innerHTML = '<span class="kcsearchengine__recommendation-title"></span>';
-					element.children[0].innerText = title;
-					element.setAttribute('value', value);
+					element.children[0].innerText = item.title;
+					element.setAttribute('value', item.value);
 					return element;
 				},
-				max: 5,
-				noResultsMessage: 'No results found.',
+				hideOnBlur: true,
+				hideOnClick: true,
+				hideOnEmpty: true,
+				max: 6,
+				noResultsMessage: 'No results found',
+				searchingMessage: 'Searching...',
+				errorMessage: 'Connection failed',
 				showOnFocus: true,
+				titleToInput: true
 			},
 			theme: 'light',
 		};
@@ -162,8 +168,24 @@ var KCSearchEngine = class KCSearchEngine {
 				if (typeof value !== 'boolean')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
+			case 'recommendations.errorMessage':
+				if (typeof value !== 'string')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
 			case 'recommendations.format':
 				if (typeof value !== 'string' && typeof value !== 'function')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
+			case 'recommendations.hideOnBlur':
+				if (typeof value !== 'boolean')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
+			case 'recommendations.hideOnClick':
+				if (typeof value !== 'boolean')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
+			case 'recommendations.hideOnEmpty':
+				if (typeof value !== 'boolean')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
 			case 'recommendations.max':
@@ -174,7 +196,15 @@ var KCSearchEngine = class KCSearchEngine {
 				if (typeof value !== 'string')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
+			case 'recommendations.searchingMessage':
+				if (typeof value !== 'string')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
 			case 'recommendations.showOnFocus':
+				if (typeof value !== 'boolean')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
+			case 'recommendations.titleToInput':
 				if (typeof value !== 'boolean')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
@@ -203,11 +233,26 @@ var KCSearchEngine = class KCSearchEngine {
 		this.#loadOption(key, value);
 	}
 
-	trigger() {
-		if (this.#options.recommendations.enabled)
-			this.#engine();
+	showRecommendations() {
+		this.#renderRecommendations();
+		this.element.classList.add('kcsearchengine--results');
+	}
 
-		console.log(this.values);
+	hideRecommendations() {
+		this.element.classList.remove('kcsearchengine--results');
+	}
+
+	trigger() {
+
+		// Run the engine
+		this.#engine(this.data, () => {
+
+			// Check if the recommendations are enabled
+			if (!this.#options.recommendations.enabled) return;
+	
+			// Show the recommendations
+			this.showRecommendations();
+		});
 	}
 
 	#processData(data) {
@@ -256,10 +301,15 @@ var KCSearchEngine = class KCSearchEngine {
 		// Check if the data is an string
 		else if (typeof data === 'string') {
 			processedData = async function() {
-				return fetch(data)
-					.then(response => response.json())
-					.then(data => { return data })
-					.catch(error => { return [] });
+				return new Promise((resolve, reject) => {
+					fetcher(data, (error, response) => {
+						if (error)
+							reject(error);
+						else
+							resolve(response);
+					});
+					xhr.send();
+				})
 			}
 
 			// Load data if live search is disabled
@@ -269,6 +319,7 @@ var KCSearchEngine = class KCSearchEngine {
 
 		// Check if the data is a function
 		else if (typeof data === 'function') {
+			
 			processedData = data;
 
 			// Load data if live search is disabled and the data is an async function
@@ -291,9 +342,9 @@ var KCSearchEngine = class KCSearchEngine {
 			<div class="kcsearchengine__wrapper">
 				<div class="kcsearchengine__input-group">
 					<input type="text" class="kcsearchengine__input" placeholder="${this.#options.placeholder}" />
-					<button type="button" class="kcsearchengine__button">
+					<div class="kcsearchengine__button">
 						${this.#options.button.icon ? this.#options.button.icon : ''}
-					</button>
+					</div>
 				</div>
 				<div class="kcsearchengine__recommendations"></div>
 			</div>`;
@@ -303,6 +354,10 @@ var KCSearchEngine = class KCSearchEngine {
 
 		this.input.addEventListener('input', () => {
 			this.trigger();
+
+			// Check if the input is empty
+			if (this.options.recommendations.hideOnEmpty && this.input.value === '')
+				this.hideRecommendations();
 		});
 
 		this.input.addEventListener('keydown', (e) => {
@@ -321,6 +376,26 @@ var KCSearchEngine = class KCSearchEngine {
 				this.clear();
 			}
 		});
+
+		this.input.addEventListener('focus', () => {
+			this.element.classList.add('kcsearchengine--focus');
+			if (this.options.recommendations.hideOnEmpty && this.input.value === '') {
+				this.hideRecommendations();
+				return;
+			}
+			if (this.options.recommendations.showOnFocus)
+				this.showRecommendations();
+		});
+
+		this.input.addEventListener('blur', () => {
+			this.element.classList.remove('kcsearchengine--focus');
+			if (this.options.recommendations.hideOnBlur)
+				this.hideRecommendations();
+		});
+
+		this.element.querySelector('.kcsearchengine__recommendations').addEventListener('mousedown', (e) => {
+			e.preventDefault();
+		});
 	}
 
 	filter(text) {
@@ -335,7 +410,7 @@ var KCSearchEngine = class KCSearchEngine {
 		return text;
 	}
 
-	#engine(data) {
+	#engine(data, onComplete) {
 
 		// Get the class data if not provided
 		if (typeof data === 'undefined')
@@ -432,18 +507,58 @@ var KCSearchEngine = class KCSearchEngine {
 
 			// Set the values from the results array
 			this.#values = this.results.map(item => item.value);
+
+			// Run the onComplete callback if provided
+			if (typeof onComplete === 'function')
+				onComplete();
 		}
 
 		// Check if the data is a function
 		else if (typeof data === 'function') {
 
+			// Function that show searching message
+			const showSearchingMessage = () => {
+				if (!this.options.recommendations.enabled) return;
+				if (!this.element.classList.contains('kcsearchengine--focus')) return;
+				if (!this.options.recommendations.showOnFocus) return;
+				if (this.options.recommendations.hideOnEmpty && this.value == '') return;
+				const recommendations = this.element.querySelector('.kcsearchengine__recommendations');
+				if (!recommendations) return;
+				recommendations.innerHTML = `<div class="kcsearchengine__recommendation-info">${this.options.recommendations.searchingMessage}</div>`;
+				this.element.classList.add('kcsearchengine--results');
+			}
+			
+			// Function that show error message
+			const showErrorMessage = () => {
+				if (!this.options.recommendations.enabled) return;
+				if (!this.element.classList.contains('kcsearchengine--focus')) return;
+				if (!this.options.recommendations.showOnFocus) return;
+				if (this.options.recommendations.hideOnEmpty && this.value == '') return;
+				const recommendations = this.element.querySelector('.kcsearchengine__recommendations');
+				if (!recommendations) return;
+				recommendations.innerHTML = `<div class="kcsearchengine__recommendation-info">${this.options.recommendations.errorMessage}</div>`;
+				this.element.classList.add('kcsearchengine--results');
+			}
+
 			// Check if the data is an async function
 			if (data.constructor.name === 'AsyncFunction') {
+
+				// Update controller
+				this.#controller.abort();
+				this.#controller = new AbortController();
+
+				const signal = this.#controller.signal;
+
+				// Show the searching message
+				showSearchingMessage();
 
 				// Check if the data needs to be fetched every time the engine is called
 				if (this.options.live) {
 					data().then(data => {
-						this.#engine(this.#processData(data));
+						if (signal.aborted) return;
+						this.#engine(this.#processData(data), onComplete);
+					}).catch(error => {
+						showErrorMessage();
 					});
 				}
 
@@ -457,7 +572,7 @@ var KCSearchEngine = class KCSearchEngine {
 
 			// Check if the data is a regular function
 			else {
-				this.#engine(this.#processData(data()));
+				this.#engine(this.#processData(data()), onComplete);
 			}
 		}
 
@@ -513,13 +628,91 @@ var KCSearchEngine = class KCSearchEngine {
 			case 'onInput':
 			case 'onSearch':
 			case 'onSubmit':
+			case 'recommendations.errorMessage':
 			case 'recommendations.format':
+			case 'recommendations.hideOnBlur':
+			case 'recommendations.hideOnClick':
+			case 'recommendations.hideOnEmpty':
 			case 'recommendations.max':
 			case 'recommendations.noResultsMessage':
+			case 'recommendations.searchingMessage':
 			case 'recommendations.showOnFocus':
+			case 'recommendations.titleToInput':
 				break;
 			default:
 				throw new Error(`The option '${key}' does not exist.`);
+		}
+	}
+
+	#renderRecommendations() {
+		// Check if the element exists
+		if (!this.element instanceof HTMLElement)
+			throw new Error('The element has not been created yet.');
+
+		// Check format function
+		const checkFormat = (format) => {
+			let result = undefined;
+
+			// Check if the format is a function
+			if (typeof format === 'function') {
+				
+				// Try that function works
+				try {
+					format({ title: 'Test', value: 'test', keywords: ['try'], url: '/test', onclick: () => {} }, 'test');
+					result = format;
+				} catch {}
+			}
+
+			// Check if the format is a string
+			else if (typeof format === 'string') {
+				result = (item, value) => {
+					const element = document.createElement('div');
+					element.classList.add('kcsearchengine__recommendation');
+					element.innerHTML = format;
+					element.setAttribute('value', item.value);
+					return element;
+				}
+			}
+
+			// Return the format function
+			return result;
+		}
+
+		// Check if the format is valid
+		let format = checkFormat(this.options.recommendations.format);
+		if (!format) format = (item, value) => {
+			const element = document.createElement('div');
+			element.classList.add('kcsearchengine__recommendation');
+			element.innerHTML = '<span class="kcsearchengine__recommendation-title"></span>';
+			element.children[0].innerText = item.title;
+			element.setAttribute('value', item.value);
+			return element;
+		};
+
+		const value = this.value;
+		const container = this.element.querySelector('.kcsearchengine__recommendations');
+		container.innerHTML = '';
+		for (let i = 0; i < this.results.length; i++) {
+			const item = this.results[i];
+			const element = format(item, value);
+			element.addEventListener('click', () => {
+				if (this.options.recommendations.titleToInput)
+					this.input.value = item.title;
+				if (typeof item.onclick === 'function')
+					item.onclick();
+				if (typeof item.url === 'string')
+					window.location.href = item.url;
+				if (this.options.recommendations.hideOnClick) {
+					this.input.blur();
+					this.hideRecommendations();
+				}
+			});
+			container.appendChild(element);
+			if (i >= this.options.recommendations.max) break;
+		}
+
+		if (container.innerHTML.trim() === '') {
+			container.innerHTML = `<div class="kcsearchengine__recommendation-info">${this.options.recommendations.noResultsMessage}</div>`;
 		}
 	}
 
@@ -528,13 +721,19 @@ var KCSearchEngine = class KCSearchEngine {
 	get element() { return this.#element; }
 	get input() { return this.#input; }
 	get options() { return this.#options; }
+	get placeholder() { return this.#input?.placeholder; }
 	get results() { return this.#results; }
 	get target() { return this.#target; }
 	get themes() { return this.#themes; }
+	get value() { return this.#input?.value; }
 	get values() { return this.#values; }
+
+	set placeholder(value) { if (this.#input instanceof HTMLInputElement) this.#input.placeholder = value; }
+	set value(value) { if (this.#input instanceof HTMLInputElement) this.#input.value = value; }
 
 	#data = [];
 	#defaults = {};
+	#controller = new AbortController();
 	#element = null;
 	#input = null;
 	#options = {};

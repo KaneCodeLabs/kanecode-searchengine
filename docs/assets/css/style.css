@@ -5,6 +5,7 @@ html {
 body {
   margin: 1rem;
   margin-left: 16rem;
+  margin-bottom: 10rem;
   pointer-events: none;
   overflow: hidden;
   opacity: inherit;
