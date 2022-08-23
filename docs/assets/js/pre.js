@@ -54,8 +54,8 @@ document.body.insertAdjacentHTML('afterbegin', `
 			Configuration
 			<div class="menu">
 				<a class="item" href="./data.html">Data</a>
-				<a class="item" href="./options.html">Options</a>
-				<a class="item" href="./functions.html">Functions</a>
+				<!-- <a class="item" href="./options.html">Options</a>
+				<a class="item" href="./functions.html">Functions</a> -->
 			</div>
 		</div>
 		<div class="item"><small>v1.0.0-alpha1</small></div>

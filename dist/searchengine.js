@@ -350,16 +350,7 @@ var KCSearchEngine = class {
 	#generate() {
 		const element = document.createElement('div');
 		element.classList.add('kcsearchengine');
-		element.innerHTML = `
-			<div class="kcsearchengine__wrapper">
-				<div class="kcsearchengine__input-group">
-					<input type="text" class="kcsearchengine__input" placeholder="${this.#options.placeholder}" />
-					<div class="kcsearchengine__button">
-						${this.#options.button.icon ? this.#options.button.icon : ''}
-					</div>
-				</div>
-				<div class="kcsearchengine__recommendations"></div>
-			</div>`;
+		element.innerHTML = `<div class="kcsearchengine__wrapper"><div class="kcsearchengine__input-group"><input type="text" class="kcsearchengine__input" placeholder="${this.#options.placeholder}" /><div class="kcsearchengine__button">${this.#options.button.icon ? this.#options.button.icon : ''}</div></div><div class="kcsearchengine__recommendations"></div></div>`;
 
 		this.#input = element.querySelector('.kcsearchengine__input');
 		this.#element = element;

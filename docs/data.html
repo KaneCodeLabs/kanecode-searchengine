@@ -4,8 +4,8 @@
 	<title>Data</title>
 
 	<!-- Kanecode SearchEngine libraries -->
-	<link rel="stylesheet" href="assets/css/searchengine.css">
-	<script src="assets/js/searchengine.js"></script>
+	<link rel="stylesheet" href="../dev/css/searchengine.css">
+	<script src="../dev/js/searchengine.js"></script>
 </head>
 <body>
 	<script src="assets/js/pre.js"></script>
@@ -131,13 +131,13 @@
 			<script>
 				var element = document.querySelector('.search-bar-3');
 				new KCSearchEngine(element, {
-					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@main/docs/data.json'
+					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@1.0.0/docs/data.json'
 				});
 			</script>
 		</div>
 		<div class="example-code">
 			<pre><code class="code js">new KCSearchEngine(element, {
-	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@main/docs/data.json'
+	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@1.0.0/docs/data.json'
 });</code></pre>
 		</div>
 	</div>
@@ -221,9 +221,9 @@
 		<div class="example-code">
 			<pre><code class="code js">new KCSearchEngine(element, {
 	// Use the fetch API to get the data from a JSON file instead of using a function
-	data: async fetch('https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine/docs/data.json')
+	data: async fetch('https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@1.0.0/docs/data.json')
 		.then(response => response.json())
-		.catch(error => [])
+		.catch(error => []);
 });</code></pre>
 		</div>
 	</div>
