@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Show results</title>
+
+	<!-- Kanecode SearchEngine libraries -->
+	<link rel="stylesheet" href="../dev/css/searchengine.css">
+	<script src="../dev/js/searchengine.js"></script>
+</head>
+<body>
+	<script src="assets/js/pre.js"></script>
+
+	<h1>Search results</h1>
+	<p>
+		The results option allows you to display the results of the search in a custom way. You can specify the number of results per page, the number of pages to display, the number of results to display, and the number of results to display in the preview. You can also specify the format of each result to add a custom style.
+	</p>
+
+	<h2 id="format">Format of the results</h2>
+	<p>
+		You can add a function to the <code>format</code> option to format the results. This function takes a <code>result</code> object as a parameter and returns a string or a element. The <code>result</code> object contains the same properties as the <a href="./data.html"><code>data</code></a> object.
+	</p>
+
+	<div class="example-wrapper show-code">
+		<div class="example-canvas" style="max-width: unset;">
+			<div class="search-bar-1" style="max-width: 400px;"></div>
+			<div class="cars-grid"></div>
+			<script>
+
+				function getDescription(result) {
+					switch (result.value % 5) {
+						case 0:
+							description = `The ${result.model} is a car produced by ${result.brand} in ${result.year} at ${result.country}. It costs ${result.price} and has an acceleration from 0 to 100 km/h of ${result.acceleration} seconds.`;
+							break;
+
+						case 1:
+							description = `${result.title} is a car produced in ${result.year} at ${result.country}. It costs around ${result.price} and has a top speed of ${result.topSpeed} km/h. Now, it is available in ${result.color} color, that is impressive.`;
+							break;
+
+						case 2:
+							description = `${result.brand} produced the ${result.model} in ${result.year}. The power of ${result.horsepower} hp, the acceleration from 0 to 100 km/h of ${result.acceleration} seconds and the top speed of ${result.topSpeed} km/h make this car an excellent choice.`;
+
+						case 3:
+							description = `The ${result.title} is one of the best cars in last years. It has a power of ${result.horsepower} hp, an acceleration from 0 to 100 km/h of ${result.acceleration} seconds and a top speed of ${result.topSpeed} km/h. It costs ${result.price} and is available in ${result.color} color.`;
+							break;
+
+						case 4:
+							description = `With a power of ${result.horsepower} hp, an acceleration from 0 to 100 km/h of ${result.acceleration} seconds and a top speed of ${result.topSpeed} km/h, the ${result.title} is one of the cars with the best performance in the world. It costs ${result.price} and is only available in ${result.color} color.`;
+							break;
+
+					}
+					return description;
+				}
+
+				new KCSearchEngine('.search-bar-1', {
+					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.0.0/docs/cars.json',
+					live: false,
+					recommendations: {
+						enabled: false
+					},
+					results: {
+						enabled: true,
+						container: '.cars-grid',
+						format: function(result) {
+							var description = getDescription(result);
+							return `<div class="car-card">
+								<h3>${result.title}</h3>
+								<p>${description}</p>
+							</div>`;
+						}
+					}
+				});
+			</script>
+		</div>
+		<div class="example-code">
+			<pre><code class="code js">new KCSearchEngine(element, {
+	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.0.0/docs/cars.json',
+	recommendations: {
+		enabled: false
+	},
+	results: {
+		enabled: true,
+		container: '.cars-grid',
+		format: function(result) {
+			var description = getDescription(result);
+			return `&lt;div class="car-card"&gt;
+						&lt;h3&gt;${result.title}&lt;/h3&gt;
+						&lt;p&gt;${description}&lt;/p&gt;
+					&lt;/div&gt;`;
+		}
+	},
+});</code></pre>
+		</div>
+	</div>
+
+	
+</body>
+</html>

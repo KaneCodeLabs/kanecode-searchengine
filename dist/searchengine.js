@@ -45,6 +45,8 @@ var KCSearchEngine = class {
 			placeholder: 'Search...',
 			recommendations: {
 				enabled: true,
+				emptyMessage: 'No results found',
+				errorMessage: 'Connection failed',
 				format: (item, value) => {
 					const element = document.createElement('div');
 					element.classList.add('kcsearchengine__recommendation');
@@ -57,13 +59,25 @@ var KCSearchEngine = class {
 				hideOnClick: true,
 				hideOnEmpty: true,
 				max: 6,
-				noResultsMessage: 'No results found',
 				searchingMessage: 'Searching...',
-				errorMessage: 'Connection failed',
 				showOnFocus: true,
 				titleToInput: true
 			},
+			results: {
+				after: (results, value) => '',
+				before: (results, value) => '',
+				container: undefined,
+				enabled: false,
+				emptyMessage: 'No results found',
+				errorMessage: 'Connection failed',
+				filterValue: true,
+				format: (item, value) => '',
+				limit: 20,
+				page: 1,
+				searchingMessage: 'Searching...',
+			},
 			theme: 'light',
+			triggerOnLoad: false
 		};
 		this.#options = this.defaults;
 
@@ -71,6 +85,8 @@ var KCSearchEngine = class {
 
 		// Merge the default options with the user options
 		this.setOptions(options);
+
+		if (this.options.triggerOnLoad) this.trigger();
 	}
 
 	clear() {
@@ -120,38 +136,35 @@ var KCSearchEngine = class {
 		// Check if the value is valid for each key
 		switch (key) {
 			case 'button.enabled':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'button.icon':
-				if (typeof value !== 'string' && value !== false) {
-					throw new Error(`The value is not valid for '${key}' option.`);
-				}
-				break;
-			case 'data':
-				if (!Array.isArray(value) && typeof value !== 'function' && typeof value !== 'string')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
 			case 'engine.lowercase':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
 			case 'engine.normalize':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
 			case 'engine.spaces':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
 			case 'engine.trim':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
 			case 'live':
+			case 'recommendations.enabled':
+			case 'recommendations.hideOnBlur':
+			case 'recommendations.hideOnClick':
+			case 'recommendations.hideOnEmpty':
+			case 'recommendations.showOnFocus':
+			case 'recommendations.titleToInput':
+			case 'results.enabled':
+			case 'results.filterValue':
+			case 'triggerOnLoad':
 				if (typeof value !== 'boolean')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
+
+			case 'placeholder':
+			case 'recommendations.emptyMessage':
+			case 'recommendations.errorMessage':
+			case 'recommendations.searchingMessage':
+			case 'results.emptyMessage':
+			case 'results.errorMessage':
+			case 'results.searchingMessage':
+				if (typeof value !== 'string')
+					throw new Error(`The value is not valid for '${key}' option.`);
+				break;
+
 			case 'onBlur':
 			case 'onChange':
 			case 'onFocus':
@@ -161,58 +174,46 @@ var KCSearchEngine = class {
 				if (typeof value !== 'function')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
-			case 'placeholder':
-				if (typeof value !== 'string')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.enabled':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.errorMessage':
-				if (typeof value !== 'string')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.format':
-				if (typeof value !== 'string' && typeof value !== 'function')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.hideOnBlur':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.hideOnClick':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
-			case 'recommendations.hideOnEmpty':
-				if (typeof value !== 'boolean')
-					throw new Error(`The value is not valid for '${key}' option.`);
-				break;
+
 			case 'recommendations.max':
+			case 'results.limit':
+			case 'results.page':
 				if (typeof value !== 'number')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
-			case 'recommendations.noResultsMessage':
-				if (typeof value !== 'string')
+
+			case 'button.icon':
+				if (typeof value !== 'string' && value !== false)
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
-			case 'recommendations.searchingMessage':
-				if (typeof value !== 'string')
+
+			case 'data':
+				if (!Array.isArray(value) && typeof value !== 'function' && typeof value !== 'string')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
-			case 'recommendations.showOnFocus':
-				if (typeof value !== 'boolean')
+
+			case 'recommendations.format':
+			case 'results.after':
+			case 'results.before':
+			case 'results.format':
+				if (typeof value !== 'string' && typeof value !== 'function')
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
-			case 'recommendations.titleToInput':
-				if (typeof value !== 'boolean')
+
+			case 'results.container':
+				if (typeof value === 'undefined')
+					break;
+				if (typeof value === 'string')
+					value = document.querySelector(value);
+				if (!(value instanceof HTMLElement))
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
+
 			case 'theme':
 				if (this.#themes.indexOf(value) === -1)
 					throw new Error(`The value is not valid for '${key}' option.`);
 				break;
+
 			default:
 				throw new Error(`The key '${key}' does not exist.`);
 		}
@@ -235,6 +236,7 @@ var KCSearchEngine = class {
 	}
 
 	showRecommendations() {
+		if (!this.options.recommendations.enabled) return;
 		this.#renderRecommendations();
 		this.element.classList.add('kcsearchengine--results');
 	}
@@ -247,6 +249,9 @@ var KCSearchEngine = class {
 
 		// Run the engine
 		this.#engine(this.data, () => {
+
+			// Print results
+			this.#renderResults();
 
 			// Check if the recommendations are enabled
 			if (!this.#options.recommendations.enabled) return;
@@ -287,18 +292,18 @@ var KCSearchEngine = class {
 
 					// Check the object properties and fill the missing ones
 					else {
-						const _item = { title: item.title, value: item.title };
+						const _item = { ...item };
 						if (Array.isArray(item.keywords))
-							if (item.keywords.every(keyword => typeof keyword === 'string' || typeof keyword === 'number'))
-								_item.keywords = item.keywords;
-						if (typeof item.format === 'string' || typeof item.format === 'function')
-							_item.format = item.format;
-						if (typeof item.onclick === 'function')
-							_item.onclick = item.onclick;
-						if (typeof item.url === 'string')
-							_item.url = item.url;
-						if (typeof item.value === 'string' || typeof item.value === 'number')
-							_item.value = item.value;
+							if (item.keywords.some(keyword => ['string', 'number'].includes(typeof keyword)))
+								_item.keywords = [];
+						if (['string', 'function'].includes(typeof item.format))
+							delete _item.format;
+						if (typeof item.onclick !== 'function')
+							delete _item.onclick;
+						if (typeof item.url !== 'string')
+							delete _item.url;
+						if (typeof item.value !== 'string' && typeof item.value !== 'number')
+							_item.value = item.title;
 
 						processedData.push(_item);
 					}
@@ -467,8 +472,16 @@ var KCSearchEngine = class {
 			const value = this.filter(this.input.value);
 			
 			// Exit if the value is empty
-			if (value.length === 0)
+			if (value.length === 0) {
+				this.#results = data;
+				this.#values = data.map(item => item.value);
+
+				// Run the onComplete callback if provided
+				if (typeof onComplete === 'function')
+					onComplete();
+
 				return;
+			}
 
 			// Loop through the data to find the equal title
 			for (let i = 0; i < data.length; i++) {
@@ -602,7 +615,9 @@ var KCSearchEngine = class {
 				// Check if the data needs to be fetched only once
 				else {
 					data().then(data => {
-						this.setOption('data', this.#processData(data));
+						data = this.#processData(data);
+						this.setOption('data', data);
+						this.#engine(data, onComplete);
 					});
 				}
 			}
@@ -641,6 +656,9 @@ var KCSearchEngine = class {
 			case 'data':
 				this.#data = this.#processData();
 				break;
+			case 'results.page':
+				this.#page = value;
+				break;
 			case 'placeholder':
 				this.input.placeholder = value;
 				break;
@@ -671,13 +689,24 @@ var KCSearchEngine = class {
 			case 'recommendations.hideOnClick':
 			case 'recommendations.hideOnEmpty':
 			case 'recommendations.max':
-			case 'recommendations.noResultsMessage':
+			case 'recommendations.emptyMessage':
 			case 'recommendations.searchingMessage':
 			case 'recommendations.showOnFocus':
 			case 'recommendations.titleToInput':
+			case 'results.after':
+			case 'results.before':
+			case 'results.enabled':
+			case 'results.filterValue':
+			case 'results.container':
+			case 'results.emptyMessage':
+			case 'results.errorMessage':
+			case 'results.format':
+			case 'results.limit':
+			case 'results.searchingMessage':
+			case 'triggerOnLoad':
 				break;
 			default:
-				throw new Error(`The option '${key}' does not exist.`);
+				throw new Error(`The option "${key}" does not exist.`);
 		}
 	}
 
@@ -733,10 +762,6 @@ var KCSearchEngine = class {
 			const item = this.results[i];
 			const element = format(item, value);
 			element.addEventListener('click', () => {
-				if (this.options.recommendations.titleToInput) {
-					this.input.value = item.title;
-					this.trigger();
-				}
 				if (typeof item.onclick === 'function')
 					item.onclick();
 				if (typeof item.url === 'string')
@@ -745,21 +770,97 @@ var KCSearchEngine = class {
 					this.input.blur();
 					this.hideRecommendations();
 				}
+				if (this.options.recommendations.titleToInput) {
+					this.input.value = item.title;
+					if (!this.options.recommendations.hideOnClick)
+						this.input.focus();
+				}
 			});
 			container.appendChild(element);
 			if (i >= this.options.recommendations.max - 1) break;
 		}
 
 		if (container.innerHTML.trim() === '') {
-			container.innerHTML = `<div class="kcsearchengine__recommendation-info">${this.options.recommendations.noResultsMessage}</div>`;
+			container.innerHTML = `<div class="kcsearchengine__recommendation-info">${this.options.recommendations.emptyMessage}</div>`;
 		}
 	}
+
+	#renderResults() {
+
+		// Check if results are enabled
+		if (!this.options.results.enabled) return;
+
+		// Check if the element exists
+		if (!(this.options.results.container instanceof HTMLElement))
+			throw new Error('The results container is not a valid element.');
+		const container = this.options.results.container;
+
+		// Check if there are no results
+		if (this.results.length === 0) {
+			container.innerHTML = this.options.results.emptyMessage;
+			return true;
+		}
+
+		// Load after and before formats
+		let after = '';
+		if (typeof this.options.results.after === 'function') {
+			try {
+				after = this.options.results.after(this.value);
+			} catch {}
+		}
+		after = (typeof after === 'string') ? after : '';
+
+		let before = '';
+		if (typeof this.options.results.before === 'function') {
+			try {
+				before = this.options.results.before(this.value);
+			} catch {}
+		}
+		before = (typeof before === 'string') ? before : '';
+
+		// Clear the results container and add the before format
+		container.innerHTML = before;
+
+		// Check format function for each result
+		let valid = true;
+		for (let i = 0; i < this.results.length; i++) {
+			const item = this.results[i];
+			let element = '';
+			try {
+				element = this.options.results.format(item, this.value);
+			} catch {
+				valid = false;
+				break;
+			}
+			if (element instanceof HTMLElement)
+				element = element.outerHTML;
+			if (typeof element !== 'string') {
+				valid = false;
+				break;
+			}
+			container.innerHTML += element;
+		}
+
+		// Check if the format is valid for all results
+		if (!valid) {
+			container.innerHTML = `<p>${this.options.results.errorMessage}</p>`;
+			return false;
+		}
+
+		// Add the after format
+		container.innerHTML += after;
+
+		// Return true
+		return true;
+	}
+
 
 	get data() { return this.#data; }
 	get defaults() { return this.#defaults; }
 	get element() { return this.#element; }
 	get input() { return this.#input; }
 	get options() { return this.#options; }
+	get page() { return this.#page; }
 	get placeholder() { return this.#input?.placeholder; }
 	get results() { return this.#results; }
 	get target() { return this.#target; }
@@ -776,6 +877,7 @@ var KCSearchEngine = class {
 	#element = null;
 	#input = null;
 	#options = {};
+	#page = 1;
 	#results = [];
 	#target = null;
 	#themes = ['light', 'dark', 'clear'];

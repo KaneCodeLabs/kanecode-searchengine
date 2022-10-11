@@ -29,7 +29,8 @@ $('.example-wrapper').each((i, wrapper) => {
 
 	const canvas = wrapper.querySelector('.example-canvas');
 	if (canvas)
-		canvas.style.maxWidth = '400px';
+		if (!canvas.style.maxWidth)
+			canvas.style.maxWidth = '400px';
 });
 
 // Remove the loader when the page is loaded
