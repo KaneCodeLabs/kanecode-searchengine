@@ -294,7 +294,7 @@ var KCSearchEngine = class {
 					else {
 						const _item = { ...item };
 						if (Array.isArray(item.keywords))
-							if (item.keywords.some(keyword => ['string', 'number'].includes(typeof keyword)))
+							if (item.keywords.some(keyword => !['string', 'number'].includes(typeof keyword)))
 								_item.keywords = [];
 						if (['string', 'function'].includes(typeof item.format))
 							delete _item.format;
@@ -604,7 +604,7 @@ var KCSearchEngine = class {
 
 				// Check if the data needs to be fetched every time the engine is called
 				if (this.options.live) {
-					data().then(data => {
+					data(this.input.value).then(data => {
 						if (signal.aborted) return;
 						this.#engine(this.#processData(data), onComplete);
 					}).catch(error => {
@@ -624,7 +624,7 @@ var KCSearchEngine = class {
 
 			// Check if the data is a regular function
 			else {
-				this.#engine(this.#processData(data()), onComplete);
+				this.#engine(this.#processData(data(this.input.value)), onComplete);
 			}
 		}
 
