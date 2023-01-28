@@ -44,7 +44,7 @@ var KCSearchEngine = class {
 			onSubmit: (results, value) => {},
 			placeholder: 'Search...',
 			recommendations: {
-				enabled: true,
+				enabled: false,
 				emptyMessage: 'No results found',
 				errorMessage: 'Connection failed',
 				format: (item, value) => {
@@ -103,7 +103,8 @@ var KCSearchEngine = class {
 		this.#generate();
 		this.setOptions(this.options);
 		
-		this.target.appendChild(this.element);
+		if (this.#target.tagName !== 'INPUT')
+			this.target.appendChild(this.element);
 	}
 
 	setOptions(options) {
@@ -359,6 +360,11 @@ var KCSearchEngine = class {
 
 		this.#input = element.querySelector('.kcsearchengine__input');
 		this.#element = element;
+
+		if (this.#target.tagName === 'INPUT') {
+			this.#input.remove();
+			this.#input = this.#target;
+		}
 
 		this.input.addEventListener('input', () => {
 			this.trigger();
@@ -715,6 +721,9 @@ var KCSearchEngine = class {
 		if (!this.element instanceof HTMLElement)
 			throw new Error('The element has not been created yet.');
 
+		const container = this.element.querySelector('.kcsearchengine__recommendations');
+		if (!container) return;
+
 		// Check format function
 		const checkFormat = (format) => {
 			let result = undefined;
@@ -756,7 +765,7 @@ var KCSearchEngine = class {
 		};
 
 		const value = this.value;
-		const container = this.element.querySelector('.kcsearchengine__recommendations');
+
 		container.innerHTML = '';
 		for (let i = 0; i < this.results.length; i++) {
 			const item = this.results[i];
