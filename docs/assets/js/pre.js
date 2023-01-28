@@ -59,7 +59,7 @@ document.body.insertAdjacentHTML('afterbegin', `
 				<a class="item" href="./functions.html">Functions</a> -->
 			</div>
 		</div>
-		<div class="item"><small>v2.1.0</small></div>
+		<div class="item"><small>v2.2.0</small></div>
 	</div>`);
 
 // Add script when page is loaded

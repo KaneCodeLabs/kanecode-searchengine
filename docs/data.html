@@ -132,14 +132,14 @@
 				var element = document.querySelector('.search-bar-3');
 				new KCSearchEngine(element, {
 					recommendations: { enabled: true },
-					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.1.0/docs/data.json'
+					data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.0/docs/data.json'
 				});
 			</script>
 		</div>
 		<div class="example-code">
 			<pre><code class="code js">new KCSearchEngine(element, {
 	recommendations: { enabled: true },
-	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.1.0/docs/data.json'
+	data: 'https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.0/docs/data.json'
 });</code></pre>
 		</div>
 	</div>
@@ -228,7 +228,7 @@
 			<pre><code class="code js">new KCSearchEngine(element, {
 	recommendations: { enabled: true },
 	// Use the fetch API to get the data from a JSON file instead of using a function
-	data: async fetch('https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.1.0/docs/data.json')
+	data: async fetch('https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.0/docs/data.json')
 		.then(response => response.json())
 		.catch(error => []);
 });</code></pre>
