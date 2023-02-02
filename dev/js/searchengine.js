@@ -853,18 +853,20 @@ var KCSearchEngine = class {
 				valid = false;
 				break;
 			}
-			if (element instanceof HTMLElement)
-				container.appendChild(element);
-			if (typeof element !== 'string' && !(element instanceof HTMLElement)) {
+			if (typeof element === 'string') {
+				const div = document.createElement('div');
+				div.innerHTML = element;
+				if (div.children.length === 1 && div.childNodes.length === 1)
+					element = div.children[0];
+				else
+					element = div;
+			}
+				
+			if (!(element instanceof HTMLElement)) {
 				valid = false;
 				break;
 			}
-			const div = document.createElement('div');
-			div.innerHTML = element;
-			if (div.children.length === 1 && div.childNodes.length === 1)
-				container.appendChild(div.children[0]);
-			else
-				container.appendChild(div);
+			container.appendChild(element);
 		}
 
 		// Check if the format is valid for all results
