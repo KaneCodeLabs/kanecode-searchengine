@@ -855,7 +855,7 @@ var KCSearchEngine = class {
 			}
 			if (element instanceof HTMLElement)
 				container.appendChild(element);
-			if (typeof element !== 'string') {
+			if (typeof element !== 'string' && !(element instanceof HTMLElement)) {
 				valid = false;
 				break;
 			}

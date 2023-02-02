@@ -13,8 +13,8 @@ To use this library you can use the following code to implement it in your `HTML
 
 Includes the following lines to `head` section:
 ```html
-<link href="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.2/dist/searchengine.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.2/dist/searchengine.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.3/dist/searchengine.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/KaneCodeLabs/kanecode-searchengine@2.2.3/dist/searchengine.min.js"></script>
 ```
 
 Includes the following lines to `body` section:
