@@ -255,7 +255,8 @@ var KCSearchEngine = class {
 			this.#renderResults();
 
 			// Check if the recommendations are enabled
-			if (!this.#options.recommendations.enabled) return;
+			if (!this.#options.recommendations.enabled && !this.#options.results.enabled)
+				return;
 	
 			// Show the recommendations
 			this.showRecommendations();
