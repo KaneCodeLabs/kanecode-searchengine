@@ -811,28 +811,39 @@ var KCSearchEngine = class {
 		}
 
 		// Load after and before formats
-		let after = '';
+		let after = null;
 		if (typeof this.options.results.after === 'function') {
 			try {
 				after = this.options.results.after(this.value);
 			} catch {}
 		}
-		after = (typeof after === 'string') ? after : '';
+		if (typeof this.options.results.after === 'string') {
+			after = document.createElement('div');
+			after.innerHTML = this.options.results.after;
+			if (after.children.length === 1 && after.childNodes.length === 1)
+				after = after.children[0];
+		}
 
-		let before = '';
+		let before = null;
 		if (typeof this.options.results.before === 'function') {
 			try {
 				before = this.options.results.before(this.value);
 			} catch {}
 		}
-		before = (typeof before === 'string') ? before : '';
+		if (typeof this.options.results.before === 'string') {
+			before = document.createElement('div');
+			before.innerHTML = this.options.results.before;
+			if (before.children.length === 1 && before.childNodes.length === 1)
+				before = before.children[0];
+		}
 
 		// Clear the results container and add the before format
-		container.innerHTML = before;
+		container.innerHTML = '';
+		if (before) container.appendChild(before);
 
 		// Check format function for each result
 		let valid = true;
-		for (let i = 0; i < this.results.length; i++) {
+		for (let i = 0; i < this.results.length && i < this.#options.results.limit; i++) {
 			const item = this.results[i];
 			let element = '';
 			try {
@@ -842,12 +853,17 @@ var KCSearchEngine = class {
 				break;
 			}
 			if (element instanceof HTMLElement)
-				element = element.outerHTML;
+				container.appendChild(element);
 			if (typeof element !== 'string') {
 				valid = false;
 				break;
 			}
-			container.innerHTML += element;
+			const div = document.createElement('div');
+			div.innerHTML = element;
+			if (div.children.length === 1 && div.childNodes.length === 1)
+				container.appendChild(div.children[0]);
+			else
+				container.appendChild(div);
 		}
 
 		// Check if the format is valid for all results
@@ -857,7 +873,7 @@ var KCSearchEngine = class {
 		}
 
 		// Add the after format
-		container.innerHTML += after;
+		if (after) container.appendChild(after);
 
 		// Return true
 		return true;
